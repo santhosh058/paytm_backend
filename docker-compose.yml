@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: paytm-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongo
+    volumes:
+      - ./:/usr/src/app
+    command: npm run start
+
+  mongo:
+    image: mongo:6.0
+    container_name: paytm-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
