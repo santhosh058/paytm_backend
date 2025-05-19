@@ -1,4 +1,4 @@
-const transactionService = require('../services/transaction.service');
+const transactionService = require('../services/transaction');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const { HTTP_STATUS } = require('../config/constants');
 

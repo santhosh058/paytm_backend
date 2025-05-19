@@ -14,6 +14,7 @@ const constants = {
     PENDING: 'pending',
     SUCCESS: 'success',
     FAILED: 'failed',
+    COMPLETED: 'completed', 
   },
 
   HTTP_STATUS: {
