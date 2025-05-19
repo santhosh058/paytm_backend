@@ -1,25 +1,36 @@
+// src/services/wallet.service.js
+
 const Wallet = require('../models/wallet.model');
+const { MESSAGES } = require('../config/constants');
 
-exports.getWallet = async (userId) => {
-  const wallet = await Wallet.findOne({ user: userId });
-  if (!wallet) throw new Error('Wallet not found');
+exports.getOrCreateWallet = async (userId) => {
+  let wallet = await Wallet.findOne({ user: userId });
+  if (!wallet) {
+    wallet = await Wallet.create({ user: userId, balance: 0 });
+  }
   return wallet;
 };
 
-exports.addFunds = async (userId, amount) => {
-  const wallet = await Wallet.findOne({ user: userId });
-  if (!wallet) throw new Error('Wallet not found');
-
-  wallet.balance += amount;
-  await wallet.save();
-
+exports.addFundsToWallet = async (userId, amount) => {
+  let wallet = await Wallet.findOne({ user: userId });
+  if (!wallet) {
+    wallet = await Wallet.create({ user: userId, balance: amount });
+  } else {
+    wallet.balance += amount;
+    await wallet.save();
+  }
   return wallet;
 };
 
-exports.withdrawFunds = async (userId, amount) => {
+exports.withdrawFromWallet = async (userId, amount) => {
   const wallet = await Wallet.findOne({ user: userId });
-  if (!wallet) throw new Error('Wallet not found');
-  if (wallet.balance < amount) throw new Error('Insufficient balance');
+  if (!wallet) {
+    throw new Error(MESSAGES.WALLET_NOT_FOUND);
+  }
+
+  if (wallet.balance < amount) {
+    throw new Error(MESSAGES.INSUFFICIENT_BALANCE);
+  }
 
   wallet.balance -= amount;
   await wallet.save();
