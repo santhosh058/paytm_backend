@@ -18,20 +18,26 @@ const { protect } = require('../middlewares/auth.middleware');
  *           schema:
  *             type: object
  *             required:
- *               - toUserId
+ *               - toUserName
  *               - amount
  *             properties:
- *               toUserId:
+ *               toUserName:
  *                 type: string
+ *                 description: Name of the recipient user
+ *                 example: santhosh
  *               amount:
  *                 type: number
+ *                 description: Amount to send
+ *                 example: 1000
  *     responses:
  *       201:
  *         description: Transaction successful
  *       400:
- *         description: Insufficient balance
+ *         description: Insufficient balance or bad request
  *       401:
  *         description: Unauthorized
+ *       404:
+ *         description: Recipient not found
  *
  * /transaction/history:
  *   get:
@@ -41,12 +47,12 @@ const { protect } = require('../middlewares/auth.middleware');
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Transaction history
+ *         description: Transaction history fetched successfully
  *       401:
  *         description: Unauthorized
  */
+
 router.post('/send', protect, transactionController.sendMoney);
 router.get('/history', protect, transactionController.transactionHistory);
-
 
 module.exports = router;
